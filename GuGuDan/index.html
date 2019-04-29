@@ -27,12 +27,14 @@
                                 value: '',
                                 result: prevState.value + ' ' + '정답', // prevState 예전 상태값
                             }
-                        })
+                        });
+                        this.input.focus();
                     } else {
                         this.setState({
                             value: '',
                             result: this.state.value + ' ' + '땡',
-                        })
+                        });
+                        this.input.focus();
                     }
                 }
 
@@ -40,12 +42,17 @@
                     this.setState({ value: e.target.value});
                 }
 
+                input;
+
+                onRefInput = (e) => { this.input = e; }
+
                 render() {
                     return (
                         <React.Fragment>
                             <div>{this.state.first} 곱하기 {this.state.second} 는?</div>
                             <form onSubmit={this.onSubmit}>
                                 <input 
+                                    ref={this.onRefInput}
                                     type="number" 
                                     value={this.state.value} 
                                     onChange={this.onChange}
