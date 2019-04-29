@@ -20,15 +20,36 @@
                     }
                 }
 
+                onSubmit = (e) => {
+                    e.preventDefault();
+                    if(parseInt(this.state.value) === this.state.first * this.state.second) {
+                        this.setState({
+                            first: Math.ceil(Math.random() * 9),
+                            second: Math.ceil(Math.random() * 9),
+                            value: '',
+                            result: this.state.value + ' ' + '정답',
+                        })
+                    } else {
+                        this.setState({
+                            value: '',
+                            result: this.state.value + ' ' + '땡',
+                        })
+                    }
+                }
+
+                onChange = (e) => {
+                    this.setState({ value: e.target.value});
+                }
+
                 render() {
                     return (
                         <div>
                             <div>{this.state.first} 곱하기 {this.state.second} 는?</div>
-                            <form>
+                            <form onSubmit={this.onSubmit}>
                                 <input 
                                     type="number" 
                                     value={this.state.value} 
-                                    onChange={(e) => this.setState({ value: e.target.value})}
+                                    onChange={this.onChange}
                                 />
                                 <button>입력!</button>
                             </form>
