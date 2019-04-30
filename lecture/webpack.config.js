@@ -14,10 +14,17 @@ module.exports = {
     }, // 입력
 
     module: {
-        rules: [{
+        // js와 jsx 파일에 룰을 적용하겠다
+        // 최신문법을 옛날 문법으로 변환하겠다
+        rules: [{ 
             test: /\.jsx?/,
-            loader: 'babel-loader',
+            loader: 'babel-loader', 
             options: {
+                // @babel/core 최신 문법으로 변환
+                // @babel/preset-env 브라우저에 맞게 최신 문법을 옛날문법으로 변환
+                // @babel/preset-react jsx
+                // babel-loader babel과 webpack 연결
+                // @babel/plugin-proposal-class-properties 클래스 문법을 쓰려면 
                 presets: ['@babel/preset-env', '@babel/preset-react'],
                 plugins: ['@babel/plugin-proposal-class-properties']
             },
