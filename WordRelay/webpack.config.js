@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     name: 'word-relay-setting',
@@ -43,7 +44,9 @@ module.exports = {
             },
         }],
     },
-    plugins: [],
+    plugins: [
+        new webpack.LoaderOptionsPlugin({ debug: true }),
+    ],
     output: {
         path: path.join(__dirname, 'dist'), // dist 폴더와 연결
         filename: 'app.js'
