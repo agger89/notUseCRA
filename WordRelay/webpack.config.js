@@ -40,15 +40,20 @@ module.exports = {
                     }],
                     '@babel/preset-react',
                 ],
-                plugins: ['@babel/plugin-proposal-class-properties']
+                plugins: [
+                    '@babel/plugin-proposal-class-properties',
+                    'react-hot-loader/babel'
+                ]
             },
         }],
     },
     plugins: [
+        // 로더에 옵션에 debug를
         new webpack.LoaderOptionsPlugin({ debug: true }),
     ],
     output: {
-        path: path.join(__dirname, 'dist'), // dist 폴더와 연결
-        filename: 'app.js'
+        path: path.join(__dirname, 'dist'), // dist 폴더와 연결 // 실제 경로
+        filename: 'app.js',
+        publicPath: '/dist/', // 가상의 경로
     }, // 출력
 };
