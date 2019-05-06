@@ -9,6 +9,9 @@ module.exports = {
         // 예를들어 밑에 entry 객체안에 './client'
         extensions: ['.js', '.jsx'] 
     },
+
+    // 코드 작성의 흐름
+    // entry에 있는 파일에 module 적용하고 plugin 적용하고 output으로 나온다
     entry: {
         app: ['./client'],
     }, // 입력
@@ -40,6 +43,7 @@ module.exports = {
             },
         }],
     },
+    plugins: [],
     output: {
         path: path.join(__dirname, 'dist'), // dist 폴더와 연결
         filename: 'app.js'
