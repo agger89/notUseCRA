@@ -31,8 +31,8 @@ class WordRelay extends Component {
     }
 
     input;
-    onRefInput = (c) => {
-        this.input = c;
+    onRefInput = (e) => {
+        this.input = e;
     }
 
     render() {
