@@ -83,26 +83,26 @@
 # code 자동 저장 webpack setting 순서
 - npm i -D react-hot-loader 터미널 입력
 - npm i -D webpack-dev-server 터미널 입력
- - package.json 에 생김
-    "devDependencies": {
-        "react-hot-loader": "^4.8.4",
-        "webpack-dev-server": "^3.3.1"
-    }
- - package.json 에 아래 처럼 변경
-    "scripts": {
-        "dev": "webpack-dev-server --hot"
-    },
+    - package.json 에 생김
+        "devDependencies": {
+            "react-hot-loader": "^4.8.4",
+            "webpack-dev-server": "^3.3.1"
+        }
+    - package.json 에 아래 처럼 변경
+        "scripts": {
+            "dev": "webpack-dev-server --hot"
+        },
 - client.jsx 에서
- - const { hot } = require('react-hot-loader/root') 추가
- - const Hot = hot(WordRelay) 추가
- - ReactDOM.render(<Hot />, document.querySelector('#root')) 변경
+    - const { hot } = require('react-hot-loader/root') 추가
+    - const Hot = hot(WordRelay) 추가
+    - ReactDOM.render(<Hot />, document.querySelector('#root')) 변경
 - webpack.config.js 에서 아래처럼 추가
- - plugins: [
-    'react-hot-loader/babel'
-   ]
- - output: {
-    publicPath: '/dist/', // 가상의 경로
-   }
+    - plugins: [
+        'react-hot-loader/babel'
+      ]
+    - output: {
+        publicPath: '/dist/', // 가상의 경로
+      }
 - 그다음 dist 폴더 삭제
 
 
