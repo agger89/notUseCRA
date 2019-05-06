@@ -21,11 +21,21 @@ module.exports = {
             loader: 'babel-loader', 
             options: {
                 // @babel/core 최신 문법으로 변환
-                // @babel/preset-env 브라우저에 맞게 최신 문법을 옛날문법으로 변환
+                // @babel/preset-env 자동으로 예전 브라우저를 지원해주는
                 // @babel/preset-react jsx
                 // babel-loader babel과 webpack 연결
                 // @babel/plugin-proposal-class-properties 클래스 문법을 쓰려면 
-                presets: ['@babel/preset-env', '@babel/preset-react'],
+                // preset은 plugin 모음을 말하는것
+                presets: [
+                    ['@babel/preset-env', {
+                        targets: {
+                            // 현재 한국에서 5% 이상인 browser 지원, chrome 마지막 2개의 버전만 지원
+                            browsers: ['> 5% in KR', 'last 2 chrome versions'],
+                        },
+                        debug: true,
+                    }],
+                    '@babel/preset-react',
+                ],
                 plugins: ['@babel/plugin-proposal-class-properties']
             },
         }],
