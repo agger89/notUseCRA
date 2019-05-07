@@ -1,4 +1,5 @@
-import React, { useState, memo } from 'react';
+// memo: state 변화가 있는 부분만 랜더링 시켜줌
+import React, { useState, memo } from 'react'; 
 import Try from './Try';
 
 function getNumbers() { // 숫자 4개를 겹치치 않게 랜덤하게 뽑는 함수
