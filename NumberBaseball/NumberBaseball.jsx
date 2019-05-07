@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import Try from './Try';
 
 function getNumbers() { // 숫자 4개를 겹치치 않게 랜덤하게 뽑는 함수
@@ -15,7 +15,7 @@ function getNumbers() { // 숫자 4개를 겹치치 않게 랜덤하게 뽑는 �
     return array;
 }
 
-const NumberBaseball = () => {
+const NumberBaseball = memo(() => {
     const [result, setResult ] = useState('');
     const [value, setValue ] = useState('');
     const [answer, setAnswer ] = useState(getNumbers());
@@ -86,6 +86,6 @@ const NumberBaseball = () => {
             </ul>
         </>
     )
-}
+});
 
 export default NumberBaseball; // 바깥에서도 사용할수 있게
