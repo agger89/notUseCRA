@@ -1,4 +1,5 @@
 // memo: state 변화가 있는 부분만 랜더링 시켜줌
+// hooks 일땐 {memo} class 컴포넌트일땐 {PureComponent}
 import React, { useState, memo } from 'react'; 
 import Try from './Try';
 
@@ -60,7 +61,6 @@ const NumberBaseball = memo(() => {
                 setTries((prevTries) => 
                     [...prevTries, { try: value, result: `${strike} 스트라이크, ${ball} 볼입니다.`}],
                 );
-                console.log(tries);
                 setValue('');
                 setResult('');
             }
