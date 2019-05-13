@@ -1,9 +1,4 @@
-import React, { Component } from 'react';
-
-// 클래스 -> constructor -> render -> componentDidMount
-// -> setState/props 바뀔때 -> shouldComponentUpdate(true) -> render -> componentDidUpdate
-// -> 부모가 나를 없앴을 시 -> componentWillUnmount
-
+import React, { useState, useRef, useEffect } from 'react';
 
 const rspCoords = {
     바위: '0',
@@ -30,43 +25,34 @@ const computerChoice = (imgCoord) => {
     })[0];
 }
 
-class RSP extends Component {
-    state = {
-        result: '',
-        imgCoord: '0',
-        score: 0,
-    };
-
-    interval;
+const RSP = () => {
+    const [result, setResult] = useState('');
+    const [imgCoord, setImgCoord] = useState(rspCoords.바위); 
+    const [score, setScore] = useState(0);
+    const interval = useRef();
 
     // 1초에 한번씩 손모양 변경
-    changeHand = () => {
-        const {imgCoord} = this.state;
+    const changeHand = () => {
         if (imgCoord === rspCoords.바위) {
-            this.setState({
-                imgCoord: rspCoords.가위
-            })
+            setImgCoord(rspCoords.가위);
         } else if (imgCoord === rspCoords.가위){
-            this.setState({
-                imgCoord: rspCoords.보
-            })
+            setImgCoord(rspCoords.보);
         } else if (imgCoord === rspCoords.보){
-            this.setState({
-                imgCoord: rspCoords.바위
-            })
+            setImgCoord(rspCoords.바위);
         }
     }
-    componentDidMount() { // 컴포넌트가 첫 랜더링된 후, 비동기 요청을 많이 한다
-        this.interval = setInterval(this.changeHand, 100);
-    }
 
-    componentWillUpdate() { // 리랜더링 후 
-
-    }
-
-    componentWillUnmount() { // 컴포넌트가 제거되기 직전, 비동기 요청 정리
-        clearInterval(this.interval) // 비동기처리를 제거해주지 않으면 웹사이트가 켜져있는 동안 계속 돌아간다
-    }
+    // lifecycle 대체
+    useEffect(() => { // componentDidMount, componentDidUpdate 역할 (1대1 대응은 아님)
+        interval.current = setInterval(changeHand, 100);
+        return () => { // componentWillUnmount 역할
+            clearInterval(interval.current) // 비동기처리를 제거해주지 않으면 웹사이트가 켜져있는 동안 계속 돌아간다
+        }
+        // imgCoord의 값들이 바뀌면 useEffect() 가 계속 실행된다
+        // 배열에는 꼭 useEffect를 다시 실행할 값만 넣어야한다
+        // 빈 배열이면 componentDidMount
+        // 배열에 값이 있으면 componentDidUpdate
+    }, [imgCoord]); 
 
     // 가위바위보 규칙
     // 가위 1 바위 0 보 -1
@@ -91,10 +77,9 @@ class RSP extends Component {
     // onClick={this.onClickBtn('바위')} 이렇게 변경하기위해
     // onClickBtn = (choice) => {} 이렇게 되있던 함수를
     // onClickBtn = (choice) => (e) => {} 고차함수로 변환
-    onClickBtn = (choice) => (e) => {
+    const onClickBtn = (choice) => (e) => {
         e.preventDefault();
-        const {imgCoord} = this.state;
-        clearInterval(this.interval);
+        clearInterval(interval.current);
         // scores 객체에 매개변수 choice를 대입해 값을 만들어준다
         // onClickBtn 함수가 실행되면 매개변수(choice)가 들어온다
         // 매개변수(choice)가 바위이면 scores객체의 바위라는 key값의 value를 반환 -> 0
@@ -104,45 +89,32 @@ class RSP extends Component {
         const cpuScore= scores[computerChoice(imgCoord)];
         const diff = myScore - cpuScore;
         if (diff === 0) {
-            this.setState({
-                result: '비겼습니다!',
-            })
+            setResult('비겼습니다!');
           // 변수 diff에 값이 -1 이거나 2이면
         } else if ([-1, 2].includes(diff)) {
-            this.setState((prevState) => {
-                return {
-                    result: '이겼습니다!',
-                    score: prevState.score + 1,
-                }
-            })
+            setResult('이겼습니다!');
+            setScore((prevScore) => prevScore + 1);
         } else {
-            this.setState((prevState) => {
-                return {
-                    result: '졌습니다!',
-                    score: prevState.score - 1,
-                }
-            })
+            setResult('졌습니다!');
+            setScore((prevScore) => prevScore - 1);
         }
         setTimeout(() => {
-            this.interval = setInterval(this.changeHand, 100);
+            interval.current = setInterval(changeHand, 100);
         }, 2000);
     }
 
-    render() {
-        const { result, score, imgCoord } = this.state;
-        return (
-            <>
-                <div id="computer" style={{background: `url(https://en.pimg.jp/023/182/267/1/23182267.jpg) ${imgCoord} 0`}} />
-                <div>
-                    <button id="rock" className="btn" onClick={this.onClickBtn('바위')}>바위</button>
-                    <button id="scissor" className="btn" onClick={this.onClickBtn('가위')}>가위</button>
-                    <button id="paper" className="btn" onClick={this.onClickBtn('보')}>보</button>
-                </div>
-                <div>{result}</div>
-                <div>현재 {score}점</div>
-            </>
-        )
-    }
+    return (
+        <>
+            <div id="computer" style={{background: `url(https://en.pimg.jp/023/182/267/1/23182267.jpg) ${imgCoord} 0`}} />
+            <div>
+                <button id="rock" className="btn" onClick={onClickBtn('바위')}>바위</button>
+                <button id="scissor" className="btn" onClick={onClickBtn('가위')}>가위</button>
+                <button id="paper" className="btn" onClick={onClickBtn('보')}>보</button>
+            </div>
+            <div>{result}</div>
+            <div>현재 {score}점</div>
+        </>
+    )
 }
 
 export default RSP;
