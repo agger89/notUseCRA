@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Ball from './Ball';
 
 function getWinNumbers() {
@@ -24,90 +24,73 @@ function getWinNumbers() {
     return [...winNumbers, bonusNumber];
 }
 
+const Lotto = () => {
+    // hooks의 특성상 Lotto 함수 컴포넌트 전체가 다시 랜더링 되는개념이다
+    // 그래서 getWinNumbers() 함수가 계속 실행되는데
+    // 그걸 막기 위해서 useMemo():(함수의 리턴값을 기억하고 있다)를 사용한다
+    // 그리고 useCallback()으로 사용한다
+    const lottoNumbers = useMemo(() => getWinNumbers(), []);
+    // useState는 조건문안에 넣으면 안됨, 반복문안에도 추천하지는 않음
+    const [winNumbers, setWinNumbers] = useState(lottoNumbers);
+    const [winBalls, setWinBalls] = useState([]);
+    const [bonus, setBonus] = useState(null);
+    const [redo, setRedo] = useState(false);
+    const timeouts = useRef([]);
 
-class Lotto extends Component {
-    state = {
-        winNumbers: getWinNumbers(), // 당첨 숫자들
-        winBalls: [],
-        bonus: null, // 보너스 공
-        redo: false,
-    };
-
-    // 배열로 만들어서 여러개를 setTimeout을 한번에 지정할수있게
-    timeouts = []; 
-
-    // setTimeout 함수
-    runTimeouts = () => {
-        console.log('runTimeouts');
-        const { winNumbers } = this.state;
+    // useEffect는 여러번 사용가능
+    // 예를들어 조건에 맞게 사용하고 싶을떄, componentDidMount만 하고 싶을때
+    useEffect(() => {
+        console.log('useEffect');
         for (let i = 0; i < winNumbers.length - 1; i++) {
-            this.timeouts[i] = setTimeout(() => {
-                this.setState((prevState) => {
-                    return {
-                        winBalls: [...prevState.winBalls, winNumbers[i]],
-                    }
-                })
+            timeouts.current[i] = setTimeout(() => {
+                setWinBalls((prevBalls) => [...prevBalls, winNumbers[i]])
             }, (i + 1) * 1000);
         }
-        this.timeouts[6] = setTimeout(() => {
-            this.setState({
-                bonus: winNumbers[6],
-                redo: true
-            })
+        timeouts.current[6] = setTimeout(() => {
+            setBonus(winNumbers[6]);
+            setRedo(true);
         }, 7000);
-    }
-
-    componentDidMount() {
-        console.log('componentDidMount');
-        this.runTimeouts();
-    }
-
-    // componentDidUpdate는 setState 될때마다 실행은 된다
-    componentDidUpdate(prevProps, prevState) {
-        // winBalls의 배열 갯수가 0이면 실행
-        if (this.state.winBalls.length === 0) {
-            console.log('componentDidUpdate');
-            this.runTimeouts();
+        return () => { // componentWillUnmount 역할
+            console.log('componentWillUnmount');
+            // 위에 있는 setTimeout 들을 forEach로 돌면서 지워준다
+            timeouts.current.forEach((v) => {
+                clearTimeout(v);
+            });
         }
-    }
-
-    componentWillUnmount() {
-        console.log('componentWillUnmount');
-        // 위에 있는 setTimeout 들을 forEach로 돌면서 지워준다
-        this.timeouts.forEach((v) => {
-            clearTimeout(v);
-        });
-    }
+        // 빈배열 [] 이면 componentDidMount
+        // 배열안에 값이 있으면 componentDidUpdate
+        // onClickRedo 함수가 실행되면 timeouts가 빈배열[]이 되니까 update
+    }, [timeouts.current]); 
 
     // 한번 더 로또 번호 뽑기위해 초기회
-    onClickRedo = () => {
+    // useCallback() 으로 useMemo()가 기억하고 있던 값을 실행
+    // useCallback(() => {}, [요부분이 update가 될때 useCallback() 실행])
+    // tip!! - useCallback()은 이벤트 함수를 자식 컴포넌트에 넘길때 꼭 사용!
+    // 예를들어 <Childcomponent onClick={ClickEvent} /> 이렇게 넘길 함수가 있으면
+    const onClickRedo = useCallback(() => {
         console.log('onclickredo');
-        this.setState({
-            winNumbers: getWinNumbers(),
-            winBalls: [],
-            bonus: null,
-            redo: false,
-        })
-        this.timeouts = [];
-    }
+        setWinNumbers(getWinNumbers());
+        setWinBalls([]);
+        setBonus(null);
+        setRedo(false);
+        timeouts.current = [];
+        // winNumbers가 바뀌면 useCallback()이 실행
+    }, [winNumbers])
 
-    render() {
-        console.log('render');
-        const { winBalls, bonus, redo } = this.state;
-        return (
-            <>
-                <div>당첨 숫자</div>
-                <div id="결과창">
-                    {winBalls.map((v) => <Ball key={v} number={v} />)}
-                </div>
-                <div>보너스</div>
-                {bonus && <Ball number={bonus} />}
-                {redo && <button onClick={this.onClickRedo}>
-                    한 번 더!
-                </button>}
-            </>
-        )
-    }
+    return (
+        <>
+            <div>당첨 숫자</div>
+            <div id="결과창">
+                {winBalls.map((v) => <Ball key={v} number={v} />)}
+            </div>
+            <div>보너스</div>
+            {bonus && <Ball number={bonus} />}
+            {redo && <button onClick={onClickRedo}>
+                한 번 더!
+            </button>}
+        </>
+    );
 }
+
 
 export default Lotto;
