@@ -61,12 +61,12 @@
       },
 - npm run dev 입력하면 dist 폴더에 app.js 생김
 - 그리고 아래와 같은 에러가 날텐데 최신 문법을 읽지 못하는 에러이니 babel을 설치
- ERROR in ./client.jsx 6:16
-Module parse failed: Unexpected token (6:16)
-You may need an appropriate loader to handle this file type.
-| const MyPortfolio = require('./MyPortfolio');
-| 
-> ReactDOM.render(<MyPortfolio />, document.querySelector('#root'));
+ - ERROR in ./client.jsx 6:16
+    Module parse failed: Unexpected token (6:16)
+    You may need an appropriate loader to handle this file type.
+    | const MyPortfolio = require('./MyPortfolio');
+    | 
+    > ReactDOM.render(<MyPortfolio />, document.querySelector('#root'));
 - 그 다음 babel 설치
     - npm i -D @babel/core @babel/preset-env @babel/preset-react babel-loader @babel/plugin-proposal-class-properties
         - "devDependencies": {
