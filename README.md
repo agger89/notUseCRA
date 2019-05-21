@@ -93,7 +93,7 @@
             "dev": "webpack-dev-server --hot"
         },
 - client.jsx 에서
-    - import { hot } = from 'react-hot-loader/root'; 추가
+    - import { hot } from 'react-hot-loader/root'; 추가
     - const Hot = hot(WordRelay) 추가
     - ReactDOM.render(<Hot />, document.querySelector('#root')) 변경
 - webpack.config.js 에서 아래처럼 추가
