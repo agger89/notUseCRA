@@ -76,7 +76,7 @@
             "@babel/preset-react": "^7.0.0",
             "babel-loader": "^8.0.5",
           }   
-- webpack.config.js 에서
+- webpack.config.js 에서 등록
     - module: {
         rules: [{
             test: /\.jsx?/,
