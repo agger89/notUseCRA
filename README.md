@@ -35,7 +35,7 @@
     - WordRelay 클래스 생성 후 export default WordRelay;
 - 그다음 client.jsx에서 
      - import WordRelay from './WordRelay';
-       ReactDom.render(<WordRelay />, document.querySelector('#root'));
+     - ReactDom.render(<WordRelay />, document.querySelector('#root'));
 - webpack.config.js에서
     - const path = require('path');
       module.exports = {
