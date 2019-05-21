@@ -4,6 +4,7 @@
  - 여러개의 javascript 파일을 합쳐서 하나의 javascript 파일로 만들어준다
 
  # webpack setting 순서
+ - 해당 폴더에 index.html 생성 후 초기 마크업 셋팅
  - 해당 폴더 terminal에서 npm init
  - author: jonny, license: MIT 정도 적어주고 yes
  - 그러면 package.json 파일이 생김
