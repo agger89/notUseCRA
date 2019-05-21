@@ -31,7 +31,7 @@
       import ReactDom from 'react-dom';
 - index.html에서 <script src="./dist/app.js"></script>
 - WordRelay.jsx 파일 생성
-    - WordRelay 클래스 생성 후 module.exports = WordRelay;
+    - WordRelay 클래스 생성 후 export default WordRelay;
 - 그다음 client.jsx에서 
      - import WordRelay from './WordRelay';
        ReactDom.render(<WordRelay />, document.querySelector('#root'));
