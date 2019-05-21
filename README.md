@@ -27,13 +27,13 @@
 
       }
 - 그다음 client.jsx 파일 생성 
-    - const React = require('react');
-      const ReactDom = require('react-dom');
+    - import React from 'react';
+      import ReactDom from 'react-dom';
 - index.html에서 <script src="./dist/app.js"></script>
 - WordRelay.jsx 파일 생성
     - WordRelay 클래스 생성 후 module.exports = WordRelay;
 - 그다음 client.jsx에서 
-     - const WordRelay = require('./WordRelay');
+     - import WordRelay from './WordRelay';
        ReactDom.render(<WordRelay />, document.querySelector('#root'));
 - webpack.config.js에서
     - const path = require('path');
@@ -81,8 +81,8 @@
         }],
       },
 # code 자동 저장 webpack setting 순서
-- npm i -D react-hot-loader 터미널 입력
-- npm i -D webpack-dev-server 터미널 입력
+- npm i -D react-hot-loader 터미널 입력 (코드 자동저장)
+- npm i -D webpack-dev-server 터미널 입력 (서버를 만들어줌, http://localhost:8080 주소를 준다)
     - package.json 에 생김
         "devDependencies": {
             "react-hot-loader": "^4.8.4",
@@ -93,7 +93,7 @@
             "dev": "webpack-dev-server --hot"
         },
 - client.jsx 에서
-    - const { hot } = require('react-hot-loader/root') 추가
+    - import { hot } = from 'react-hot-loader/root'; 추가
     - const Hot = hot(WordRelay) 추가
     - ReactDOM.render(<Hot />, document.querySelector('#root')) 변경
 - webpack.config.js 에서 아래처럼 추가
